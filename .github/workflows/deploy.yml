@@ -6,44 +6,50 @@ on:
       - main
 
 permissions:
-  contents: read
   pages: write
+  contents: read
   id-token: write
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository (full)
+      - name: Checkout repo
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          persist-credentials: true
 
-      - name: Setup Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - name: Install dependencies
-        working-directory: ./portfolio_website
-        run: |
-          if [ -f package-lock.json ]; then npm ci; else npm install; fi
+      - name: Install deps
+        run: npm ci
 
       - name: Build
-        working-directory: ./portfolio_website
         run: npm run build
 
-      - name: Configure git (for deploy commit)
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      - name: Upload build
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      contents: read
+
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: ./dist
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./portfolio_website/dist
-          publish_branch: gh-pages
-          force_orphan: true
-          commit_message: "chore: deploy site from GitHub Actions"
+          publish_dir: ./dist
