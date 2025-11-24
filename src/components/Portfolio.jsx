@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from 'react';
+const BASE = import.meta.env.BASE_URL || '/';
+
+
 
 export default function Portfolio() {
   const [theme, setTheme] = useState('light');
@@ -25,7 +28,7 @@ export default function Portfolio() {
             <a href="mailto:jayrajlakkad85@gmail.com" className="text-sm px-3 py-1 rounded-full border border-gray-300 dark:border-gray-600 bg-white/60 dark:bg-gray-700/40">jayrajlakkad85@gmail.com</a>
             <a href="#" className="text-sm px-3 py-1 rounded-full border border-gray-300 dark:border-gray-600 bg-white/60 dark:bg-gray-700/40">LinkedIn</a>
             <a href="#" className="text-sm px-3 py-1 rounded-full border border-gray-300 dark:border-gray-600 bg-white/60 dark:bg-gray-700/40">GitHub</a>
-            <a href="/Jayraj_Resume_20251108.pdf" className="text-sm px-3 py-1 rounded-full border border-gray-300 dark:border-gray-600 bg-white/60 dark:bg-gray-700/40" download>Download Resume</a>
+            <a href=`${BASE}/Jayraj_Resume_20251108.pdf` className="text-sm px-3 py-1 rounded-full border border-gray-300 dark:border-gray-600 bg-white/60 dark:bg-gray-700/40" download>Download Resume</a>
           </div>
         </div>
 
