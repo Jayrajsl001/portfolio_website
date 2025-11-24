@@ -25,9 +25,6 @@ jobs:
         with:
           node-version: '20'
 
-      # If your Vite project is inside a subfolder named `portfolio_website`,
-      # the working-directory below ensures npm runs in the right place.
-      # If your project is at repo root, remove the `working-directory:` lines and set publish_dir to ./dist.
       - name: Install dependencies
         working-directory: ./portfolio_website
         run: |
@@ -42,11 +39,11 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Deploy to GitHub Pages (orphan publish, avoid history conflicts)
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+          publish_dir: ./portfolio_website/dist
           publish_branch: gh-pages
           force_orphan: true
           commit_message: "chore: deploy site from GitHub Actions"
