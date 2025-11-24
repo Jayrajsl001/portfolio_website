@@ -42,11 +42,11 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Deploy to GitHub Pages (orphan publish to avoid history conflicts)
+      - name: Deploy to GitHub Pages (orphan publish, avoid history conflicts)
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./portfolio_website/dist
+          publish_dir: ./dist
           publish_branch: gh-pages
           force_orphan: true
           commit_message: "chore: deploy site from GitHub Actions"
