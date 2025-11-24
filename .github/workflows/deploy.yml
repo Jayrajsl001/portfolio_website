@@ -6,16 +6,19 @@ on:
       - main
 
 permissions:
-  pages: write
   contents: read
+  pages: write
   id-token: write
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
+      - name: Checkout (full history & credentials)
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -23,33 +26,22 @@ jobs:
           node-version: '20'
 
       - name: Install deps
-        run: npm ci
+        run: |
+          if [ -f package-lock.json ]; then npm ci; else npm install; fi
 
       - name: Build
         run: npm run build
 
-      - name: Upload build
-        uses: actions/upload-artifact@v4
-        with:
-          name: build
-          path: dist
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      contents: read
-
-    steps:
-      - name: Download build artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: build
-          path: ./dist
+      - name: Configure git (for deploy commit)
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+          publish_dir: ./dist        # change to ./portfolio_website/dist if your project is in that subfolder
+          publish_branch: gh-pages
+          force_orphan: true
+          commit_message: "chore: deploy site from GitHub Actions"
