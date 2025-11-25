@@ -41,7 +41,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GH_PAGES_TOKEN }}
-          publish_dir: ./portfolio_website/dist            # change to ./portfolio_website/dist if your build output is in that subfolder
+          publish_dir: ./dist            # change to ./portfolio_website/dist if your build output is in that subfolder
           publish_branch: gh-pages
           force_orphan: true
           commit_message: "chore: deploy site from GitHub Actions (PAT)"
